@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { ElMessage } from "element-plus";
 
-const URL = "http://127.0.0.1:8000";
+// const URL = "http://127.0.0.1:8000";
+const URL = "https://bookstoreapi-01ys.onrender.com";
 
 export const dataStore = defineStore("data", {
 	state: () => ({
@@ -33,6 +34,7 @@ export const dataStore = defineStore("data", {
 			this.accessToken = null;
 			this.isAuthenticated = false;
 			this.message("success", "You are signed out!");
+			this.isLoading = false;
 			navigateTo("/signin", { replace: true });
 			console.log("Sign out successful!");
 		},
@@ -68,25 +70,29 @@ export const dataStore = defineStore("data", {
 					this.message("error", error.message);
 					console.error("Error occurred:", error.message);
 				}
+				this.isLoading = false;
 			}
 			this.isLoading = false;
 		},
 		// sign up
 		async signUp(signUpForm: any) {
 			try {
+				this.isLoading = true;
 				const response = await axios.post(`${URL}/user/users/signup/`, signUpForm);
 				this.message("success", response.data.message);
 				navigateTo("/signin");
 				console.log("Sign up successful!");
 			} catch (error: any) {
 				if (error.response) {
-					this.message("error", error.response.data);
+					this.message("error", error.response.data.username[0]);
 					console.error("Sign-up error:", error.response.data);
 				} else {
 					this.message("error", "Sign-up failed! Please check your credentials!");
 					console.error("Error occurred:", error.message);
 				}
+				this.isLoading = false;
 			}
+			this.isLoading = false;
 		},
 		// get user list
 		async getUserList(token: string) {
@@ -119,6 +125,77 @@ export const dataStore = defineStore("data", {
 					console.error("Error occurred:", error.message);
 				}
 			}
+		},
+		// add book
+		async addBookAction(data: any) {
+			this.isLoading = true;
+			try {
+				const response = await axios.post(`${URL}/books/`, data, {
+					headers: {
+						Authorization: `Bearer ${this.accessToken}`,
+					},
+				});
+				await this.getBookList();
+				this.message("success", "Add book successfully!");
+				navigateTo({path: '/devmode'})
+			} catch (error: any) {
+				if (error.response) {
+					this.message("error", `Add book error: ${error.response.data}`);
+					console.error("Add book error:", error);
+				} else {
+					this.message("error", "Add book failed!");
+					console.error("Error occurred:", error.message);
+				}
+				this.isLoading = false;
+			}
+			this.isLoading = false
+		},
+		// update book
+		async updateBook(id: number, data: any) {
+			this.isLoading = true;
+			try {
+				const response = await axios.patch(`${URL}/books/${id}/`, data, {
+					headers: {
+						Authorization: `Bearer ${this.accessToken}`,
+					},
+				});
+				await this.getBookList();
+				this.message("success", "Update book successfully!");
+				navigateTo({path: '/devmode'})
+			} catch (error: any) {
+				if (error.response) {
+					this.message("error", `Update book error: ${error.response.data}`);
+					console.error("Update book error:", error);
+				} else {
+					this.message("error", "Update book failed!");
+					console.error("Error occurred:", error.message);
+				}
+				this.isLoading = false;
+			}
+			this.isLoading = false
+		},
+		// delete book
+		async deleteBook(id: number) {
+			this.isLoading = true;
+			try {
+				const response = await axios.delete(`${URL}/books/${id}/`, {
+					headers: {
+						Authorization: `Bearer ${this.accessToken}`,
+					},
+				});
+				await this.getBookList();
+				this.message("success", "Delete book successfully!");
+			} catch (error: any) {
+				if (error.response) {
+					this.message("error", `Delete book error: ${error.response.data}`);
+					console.error("Delete book error:", error);
+				} else {
+					this.message("error", "Delete book failed!");
+					console.error("Error occurred:", error.message);
+				}
+				this.isLoading = false;
+			}
+			this.isLoading = false
 		},
 	},
 });

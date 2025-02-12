@@ -6,7 +6,7 @@ definePageMeta({
 import { dataStore } from '@/stores/dataStore';
 
 // store
-const isLoading = dataStore().isLoading;
+const isLoading = computed(() => dataStore().isLoading)
 const signIn = dataStore().signIn;
 
 // from ref
@@ -50,7 +50,6 @@ const resetForm = () => {
    <el-form
       :model="signInForm"
       :rules="rules"
-      v-loading="isLoading"
       ref="formRef"
       class="signin-form"
       aria-invalid="grammar"
@@ -81,6 +80,7 @@ const resetForm = () => {
          style="width: 100%;"
          @click="submitForm"
          class="signin-btn"
+         :loading="isLoading"
       >Sign in</el-button>
 
       <p class="signup-text">

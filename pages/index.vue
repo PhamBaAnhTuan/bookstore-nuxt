@@ -9,6 +9,8 @@ definePageMeta({
 })
 
 const bookList = computed(() => dataStore().bookList)
+
+const getBookList = dataStore().getBookList;
 </script>
 
 <template>
@@ -40,16 +42,25 @@ const bookList = computed(() => dataStore().bookList)
             >
                <el-button size="small">{{ item.price }}$</el-button>
             </el-badge>
-            <el-badge class="freeship" type="success">
+            <el-badge
+               class="freeship"
+               type="success"
+            >
                <el-button size="small">{{ item.discount }}%</el-button>
             </el-badge>
          </div>
       </el-card>
 
-      <el-empty
+      <el-button
          v-else
-         description="Welcome!"
-      />
+         type="primary"
+         size="large"
+         style="width: 20%;"
+         @click="getBookList"
+         :loading="isLoading"
+      >
+         Get book
+      </el-button>
    </div>
 </template>
 

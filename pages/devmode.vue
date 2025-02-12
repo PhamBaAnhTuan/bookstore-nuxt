@@ -13,9 +13,11 @@ import {
 } from 'element-plus';
 // data
 const bookList = computed(() => dataStore().bookList)
+// actions
+const deleteBookAction = dataStore().deleteBook;
 // column
-const data = ref(bookList);
-const columns = [
+const data:any = ref(bookList);
+const columns:any = [
    {
       key: 'id',
       dataKey: 'id',
@@ -44,12 +46,12 @@ const columns = [
       dataKey: 'price',
       title: 'Price',
       width: 50,
-      cellRenderer: ({ rowData }) => <ElTag>{rowData.price}</ElTag>,
+      cellRenderer: ({ rowData }) => <ElTag>{rowData.price}$</ElTag>,
    },
    {
       key: 'discount',
       dataKey: 'discount',
-      title: '% Discount',
+      title: 'Discount',
       width: 100,
       align: 'center',
       cellRenderer: ({ rowData }) => <ElTag>{rowData.discount}%</ElTag>,
@@ -74,36 +76,80 @@ const columns = [
                size="small">
                Edit
             </ElButton>
-            <ElButton size="small" type="danger">
+            <ElButton onClick={() => deleteBook(rowData)}
+               size="small"
+               type="danger">
                Delete
             </ElButton>
          </>
       ),
    },
 ]
-
+// update book
 const bookDetail = (book: any) => {
    navigateTo({
       path: '/updatebook',
-      query: {id: book.id}
+      query: { id: book.id }
    });
+};
+// add book
+const addBook = () => {
+   navigateTo({
+      path: '/addbook'
+   });
+};
+// delete book method
+const deleteBook = async (book: any) => {
+   try {
+      // Show confirmation dialog
+      await ElMessageBox.confirm(
+         `Are you sure you want to delete "${book.title}"?`,
+         'Confirm Delete',
+         {
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+            type: 'warning',
+         }
+      );
+
+      // If user confirms, delete the book
+      await deleteBookAction(book.id);
+
+      // Show success message
+      ElMessage({
+         type: 'success',
+         message: 'Book deleted successfully!',
+      });
+   } catch (error) {
+      // Handle when user cancels
+      ElMessage({
+         type: 'info',
+         message: 'Delete canceled',
+      });
+   }
 };
 </script>
 
 
 <template>
-   <h1 class="title">Book list</h1>
+   <h1 class="title">BOOK LIST</h1>
    <div class="container">
       <el-table-v2
          :columns="columns"
          :data="data"
-         :width="1000"
-         :height="400"
+         :height="450"
+         :width="1100"
          row-key="id"
          fixed
          class="table"
       />
    </div>
+   <el-button
+      type="success"
+      size="large"
+      class="add-btn"
+      @click="addBook"
+   >Add book</el-button>
 </template>
 
 
@@ -120,5 +166,12 @@ const bookDetail = (book: any) => {
 .title {
    text-align: center;
    margin: 20px 0;
+   color: 'white';
+}
+
+.add-btn {
+   position: absolute;
+   bottom: 50px;
+   right: 220px;
 }
 </style>

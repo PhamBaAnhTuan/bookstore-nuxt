@@ -7,15 +7,18 @@ import { dataStore } from '../stores/dataStore';
 // books
 const bookList = dataStore().bookList;
 const isLoading = computed(() => dataStore().isLoading);
-const updateBook = dataStore().updateBook;
-// route param query
-const route = useRoute().query;
-// Converts id to a number
-const id = parseInt(route.id, 10);
-const index = bookList.findIndex((book) => book.id === id);
+const addBookAction = dataStore().addBookAction;
 
-//  from ref
-const form = ref(bookList[index]);
+// from ref
+const form = ref({
+   title: '',
+   author: '',
+   img: '',
+   price: '',
+   discount: '',
+   free_ship: '',
+   description: ''
+});
 const formRef = ref(null);
 
 // rules
@@ -46,16 +49,17 @@ const rules = ref({
 const submitForm = () => {
    formRef.value.validate((valid) => {
       if (valid) {
-         updateBook(id, form.value)
+         addBookAction(form.value)
       } else {
          console.log('error submit!!');
       }
    });
 }
+
 </script>
 
 <template>
-   <el-form
+<el-form
       :model="form"
       :rules="rules"
       ref="formRef"
@@ -64,7 +68,8 @@ const submitForm = () => {
       label-position="top"
       label-width="auto"
    >
-      <h1>Update Book</h1>
+
+   <h1>Add Book</h1>
 
       <el-form-item
          label="Title"
@@ -106,7 +111,6 @@ const submitForm = () => {
             v-model="form.free_ship"
             placeholder="Select"
             size="default"
-            prop="free_ship"
          >
             <el-option
                label="Yes"
@@ -128,7 +132,7 @@ const submitForm = () => {
          @click="submitForm"
          :loading="isLoading"
          class="signin-btn"
-      >Update</el-button>
+      >Add</el-button>
 
    </el-form>
 
@@ -141,7 +145,7 @@ h1 {
 
 .form-container {
    display: grid;
-   padding: 35px;
+   padding: 40px;
    flex-direction: column;
    align-items: center;
    justify-content: center;
@@ -157,4 +161,5 @@ h1 {
    min-width: 27vw;
    color: black;
 }
+
 </style>
