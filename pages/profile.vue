@@ -1,6 +1,7 @@
 <script setup>
 definePageMeta({
-   layout: 'main'
+   layout: 'main',
+   // keepalive: true,
 })
 import { dataStore } from '../stores/dataStore.ts';
 
@@ -11,15 +12,14 @@ const data = computed(() => dataStore().$state);
 
 <template>
    <div class="profile-header">
-      <!-- <img
+      <img
          src="/img/Kendrick.jpg"
          alt="Profile"
          class="profile-pic"
-      /> -->
+      />
       <h1 v-if="data.isAuthenticated">You're signed in!</h1> <br>
 
-      <h3>User name: {{ user.username }}</h3>
-      <h3>Role: {{ user.roles[0] }}</h3>
+      <h3>User name: {{ user?.username }}</h3>
    </div>
 </template>
 

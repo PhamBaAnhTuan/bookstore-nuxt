@@ -123,7 +123,7 @@ const resetForm = () => {
 }
 
 .signup-btn:hover {
-   background-color: aqua;
+   background-color: #048a82;
    color: white;
    transform: scale(1.05)
 }

@@ -8,7 +8,7 @@ definePageMeta({
    layout: 'main'
 })
 
-const bookList = dataStore().bookList;
+const bookList = computed(() => dataStore().bookList)
 </script>
 
 <template>
@@ -28,15 +28,27 @@ const bookList = dataStore().bookList;
          <div class="card-content">
             <h3 class="card-title">{{ item.title }}</h3>
             <p class="card-description">
-               {{ item.description || "Lorem Ipsum is simply dummy text of the printing and typesetting industry." }}
+               {{ item.author || "Pham Ba Anh Tuan" }}
             </p>
 
+         </div>
+
+         <div class="price-container">
+            <el-badge
+               class="price"
+               type="primary"
+            >
+               <el-button size="small">{{ item.price }}$</el-button>
+            </el-badge>
+            <el-badge class="freeship" type="success">
+               <el-button size="small">{{ item.discount }}%</el-button>
+            </el-badge>
          </div>
       </el-card>
 
       <el-empty
          v-else
-         description="no book"
+         description="Welcome!"
       />
    </div>
 </template>
@@ -61,6 +73,7 @@ const bookList = dataStore().bookList;
    height: 300px;
    width: 250px;
    padding: 5px;
+   justify-content: center;
    /* margin: 10px; */
    border-radius: 10px;
    background: var(--el-color-primary-light-9);
@@ -102,5 +115,20 @@ const bookList = dataStore().bookList;
    color: #666;
    margin-bottom: 15px;
    text-align: justify;
+}
+
+
+.price-container {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.price {
+   margin-top: 10px;
+}
+
+.freeship {
+   margin-top: 10px;
 }
 </style>

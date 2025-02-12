@@ -12,7 +12,7 @@ import {
    TableV2FixedDir,
 } from 'element-plus';
 // data
-const bookList = dataStore().bookList;
+const bookList = computed(() => dataStore().bookList)
 // column
 const data = ref(bookList);
 const columns = [
@@ -60,7 +60,7 @@ const columns = [
       title: 'Free ship',
       width: 150,
       align: 'center',
-      cellRenderer: ({ rowData }) => <ElTag>{rowData.free_ship}</ElTag>,
+      cellRenderer: ({ rowData }) => <ElTag>{rowData.free_ship ? "Free ship" : "No"}</ElTag>,
    },
    {
       key: 'operations',
@@ -92,6 +92,7 @@ const bookDetail = (book: any) => {
 
 
 <template>
+   <h1 class="title">Book list</h1>
    <div class="container">
       <el-table-v2
          :columns="columns"
@@ -114,5 +115,10 @@ const bookDetail = (book: any) => {
 
 .table {
    color: black;
+}
+
+.title {
+   text-align: center;
+   margin: 20px 0;
 }
 </style>

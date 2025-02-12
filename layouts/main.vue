@@ -6,6 +6,7 @@ import { ArrowDown, Search } from '@element-plus/icons-vue';
 // user state
 const userData = computed(() => dataStore().user);
 const signOut = dataStore().signOut;
+const getUserList = dataStore().getUserList;
 const getBookList = dataStore().getBookList;
 const route = useRoute();
 
@@ -60,8 +61,16 @@ const searchInput = ref('');
                            to="/profile"
                         >Profile</nuxt-link>
                      </el-dropdown-item>
-                     <el-dropdown-item v-if="userData">Developer mode</el-dropdown-item>
-                     <el-dropdown-item v-if="userData">Set theme</el-dropdown-item>
+                     <el-dropdown-item v-if="userData">
+                        <nuxt-link
+                           style="text-decoration: none;"
+                           to="/devmode"
+                        >Develop mood</nuxt-link>
+                     </el-dropdown-item>
+                     
+                     <el-dropdown-item @click="getBookList">
+                        Get books
+                     </el-dropdown-item>
 
                      <el-dropdown-item
                         v-if="userData"
@@ -71,9 +80,6 @@ const searchInput = ref('');
                         Sign out
                      </el-dropdown-item>
 
-                     <el-dropdown-item @click="getBookList">
-                        Get books
-                     </el-dropdown-item>
 
                      <el-dropdown-item v-if="!userData">
                         <nuxt-link
