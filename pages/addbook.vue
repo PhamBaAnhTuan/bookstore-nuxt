@@ -29,7 +29,7 @@ const rules = ref({
    ],
    author: [
       { required: true, message: 'Please input author name', trigger: 'blur' },
-      { min: 3, max: 20, message: 'Author name should be 3 to 20 characters', trigger: 'blur' },
+      { min: 3, max: 100, message: 'Author name should be over 10 characters', trigger: 'blur' },
    ],
    price: [
       { required: true, message: 'Please input price', trigger: 'blur' },

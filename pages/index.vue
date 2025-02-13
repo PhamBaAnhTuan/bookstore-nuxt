@@ -55,7 +55,7 @@ const getBookList = dataStore().getBookList;
          v-else
          type="primary"
          size="large"
-         style="width: 20%;"
+         style="width: 100%;"
          @click="getBookList"
          :loading="isLoading"
       >
